@@ -1,0 +1,74 @@
+<div id="collection" class="{{ collection.handle }} clearfix">
+  {% if collection.handle == "all" %}
+  <h2>{{ settings.tr_product_collections }}</h2>
+
+  <div id="content-table" class="clearfix">
+    {% for collection in collections %}
+    {% unless collection.all_products_count == 0 %}
+    <div class="product{% cycle 'all-featured': '', '', '', ' last' %}">
+      <div class="image">
+        <a href="{{ collection.url }}">
+          <img src="{{ collection.products.first.featured_image | product_img_url: 'medium' }}" alt="{{ product.title | escape  }}" />
+        </a>
+      </div>
+      <div class="details">
+        <a href="{{ collection.url }}">
+          <span class="title">{{ collection.title }}</span>
+        </a>
+      </div>
+    </div>
+    {% endunless %}
+    {% endfor %}
+  </div>
+
+  {% else %}
+  {% paginate collection.products by settings.pagination_limit %}
+
+  <div class="clearfix">
+    <div class="fl">
+      <h2>{{ collection.title }}</h2>
+      <span class="all-products-count subtext">{{ collection.all_products_count }} {{ collection.all_products_count | pluralize: 'product', 'products' }}</span>
+    </div>
+    <div class="paginate fr cy">
+      {% include 'pagination' %}
+    </div>
+  </div>
+  
+  {% if settings.collection_description %}
+  <div class="description">
+    {{ collection.description }}
+  </div>
+  {% endif %}
+
+  {% if settings.collection_tags %}
+  <nav class="tags">
+    <ul class="clearfix">
+      <li{% unless current_tags %} class="active"{% endunless %}><a href="/collections/{{ collection.handle }}">All</a>
+      {% for tag in collection.all_tags %}
+      {% if current_tags contains tag %}
+      <li class="active">{{ tag | link_to_remove_tag: tag }}</li>
+      {% else %}
+      <li>{{ tag | link_to_tag: tag }}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  <div id="content-table" class="clearfix">
+    {% for product in collection.products %}
+    {% include 'product-loop' with collection.handle %}
+    {% endfor %}
+  </div>
+
+  <div class="clearfix">
+    <div class="paginate fr">
+      {% include 'pagination' %}
+    </div>
+  </div>
+
+  {% endpaginate %}
+  {% endif %}
+</div> <!-- /#collection -->
+
+{% include 'recently-viewed' %}

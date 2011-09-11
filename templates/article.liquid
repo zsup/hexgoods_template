@@ -1,0 +1,72 @@
+<div id="article" class="clearfix">
+  <div class="article-body clearfix">
+    <h2>{{ article.title }}</h2>
+    <span class="date subtext">Posted {{ article.created_at | date: "%B %d %Y" }}</span>
+    <div class="content">
+      {{ article.content }}
+    </div>
+  </div> <!-- /.article-body -->
+
+  {% if settings.comment_method == "facebook" %}
+  <div class="facebook-comments" style="padding-top:20px;">
+    <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+    <fb:comments href="{{ shop.url }}{{ article.url }}" num_posts="30" width="660"></fb:comments>
+  </div>
+  {% endif %}
+
+  {% if blog.comments_enabled? %}
+  <div id="comments" class="comments">
+    {% if article.comments.size > 0 %}
+    {% paginate article.comments by 100 %}
+
+    <h3>Comments</h3>
+    <span class="subtext">{{ article.comments_count }} {{ article.comments_count | pluralize: 'comment', 'comments' }}</span>
+    {% for comment in article.comments %}
+    <div id="comment-{{ comment.id }}" class="comment clearfix">
+      <h5>{{ comment.author }}</h5>
+      <span class="subtext">{{ comment.created_at | date: "%B %d %Y at %I:%M%p" }}</span>
+      <div class="content">{{ comment.content }}</div>
+    </div> <!-- /.comment -->
+    {% endfor %}
+
+    <div class="clearfix">
+      <div class="paginate fr">
+        {% include 'pagination' %}
+      </div>
+    </div>
+    {% endpaginate %}
+
+    {% endif %}
+    <div class="comment_form">
+      {% form article %}
+      <h3>Leave a comment</h3>
+
+      {% if form.posted_successfully? %}
+      {% if blog.moderated? %}
+      <span class="subtext">Successfully posted your comment. It will have to be approved by the blog owner first before showing up.</span>
+      {% else %}
+      <span class="subtext">Successfully posted your comment.</span>
+      {% endif %}
+      {% endif %}
+
+      {% if form.errors %}
+      <span class="subtext error">Not all the fields have been filled out correctly</span>
+      {% endif %}
+
+      <input type="text" id="comment_author" name="comment[author]" size="40" value="Your name" class="replace"{% if form.errors contains 'author' %} class="input-error"{% endif %} />
+      <input type="text" id="comment_email" name="comment[email]" size="40" value="Your email" class="replace"{% if form.errors contains 'email' %} class="input-error"{% endif %} />
+      <textarea id="comment_body" name="comment[body]" cols="40" rows="5" class="replace"{% if form.errors contains 'body' %} class="input-error"{% endif %}>{{form.body}}</textarea>
+
+      <input type="submit" value="Post comment" id="comment-submit" />
+
+      {% if blog.moderated? %}
+      <div class="notice">Comments have to be approved before showing up</div>
+      {% endif %}
+
+      {% endform %}
+    </div> <!-- /#comments -->
+  </div> <!-- /div.comment_form -->
+  {% endif %}
+</div> <!-- /#article -->
+
+{% include 'recently-viewed' %}

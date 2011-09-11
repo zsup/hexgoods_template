@@ -1,0 +1,88 @@
+{% if settings.sidebar_linklist_1.title != "" and linklists[settings.sidebar_linklist_1].links.size > 0 %}
+<nav>
+  <span class="heading">{{ linklists[settings.sidebar_linklist_1].title }}</span>
+  <ul>
+    {% for link in linklists[settings.sidebar_linklist_1].links %}
+    <li><a href="{{ link.url }}"{% if link.url == active_url %} class="current"{% endif %}{% if template == 'article' and link.url == blog.url %} class="current"{% endif %}>{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.sidebar_linklist_2.title != "" and linklists[settings.sidebar_linklist_2].links.size > 0 %}
+<nav>
+  <span class="heading">{{ linklists[settings.sidebar_linklist_2].title }}</span>
+  <ul>
+    {% for link in linklists[settings.sidebar_linklist_2].links %}
+    <li><a href="{{ link.url }}"{% if link.url == active_url %} class="current"{% endif %}{% if template == 'article' and link.url == blog.url %} class="current"{% endif %}>{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.sidebar_linklist_3.title != "" and linklists[settings.sidebar_linklist_3].links.size > 0 %}
+<nav>
+  <span class="heading">{{ linklists[settings.sidebar_linklist_3].title }}</span>
+  <ul>
+    {% for link in linklists[settings.sidebar_linklist_3].links %}
+    <li><a href="{{ link.url }}"{% if link.url == active_url %} class="current"{% endif %}{% if template == 'article' and link.url == blog.url %} class="current"{% endif %}>{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.sidebar_linklist_4.title != "" and linklists[settings.sidebar_linklist_4].links.size > 0 %}
+<nav>
+  <span class="heading">{{ linklists[settings.sidebar_linklist_4].title }}</span>
+  <ul>
+    {% for link in linklists[settings.sidebar_linklist_4].links %}
+    <li><a href="{{ link.url }}"{% if link.url == active_url %} class="current"{% endif %}{% if template == 'article' and link.url == blog.url %} class="current"{% endif %}>{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.sidebar_linklist_5.title != "" and linklists[settings.sidebar_linklist_5].links.size > 0 %}
+<nav>
+  <span class="heading">{{ linklists[settings.sidebar_linklist_5].title }}</span>
+  <ul>
+    {% for link in linklists[settings.sidebar_linklist_5].links %}
+    <li><a href="{{ link.url }}"{% if link.url == active_url %} class="current"{% endif %}{% if template == 'article' and link.url == blog.url %} class="current"{% endif %}>{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.shop_by_type %}
+<nav>
+  <span class="heading">{{ settings.tr_shop_by_type }}</span>
+  <ul>
+    {% for type in shop.types %}
+    <li>{{ type | link_to_type }}</li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.shop_by_vendor %}
+<nav>
+  <span class="heading">{{ settings.tr_shop_by_vendor }}</span>
+  <ul>
+    {% for vendor in shop.vendors %}
+    <li>{{ vendor | link_to_vendor }}</li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.show_articles %}
+<nav>
+  <span class="heading">{{ settings.tr_recent_articles }}</span>
+  <ul>
+    {% for article in blogs[settings.sidebar_blog].articles limit:6 %}
+    <li><a href="{{ article.url }}"{% if article.url == active_url %} class="current"{% endif %}>{{ article.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% if settings.show_about_us %}
+<nav>
+  <span class="heading">{{ settings.tr_about_us }}</span>
+  <div>
+    {{ pages.about-us.content | strip_html | truncatewords: 50 }} <a href="{{ pages.about-us.url }}">Read more</a>
+  </div>
+</nav>
+{% endif %}

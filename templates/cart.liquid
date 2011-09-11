@@ -1,0 +1,68 @@
+<script type="text/javascript">
+function remove_item(id) {
+  document.getElementById('updates_'+id).value = 0;
+  document.getElementById('cartform').submit();
+}
+</script>
+<div id="cart" class="cart clearfix">
+  {% if cart.item_count == 0 %}
+  <div class="c" style="padding:100px 0;">
+    <h2 class="title" style="text-align:center;">Your Cart is Empty</h2>
+  </div>
+  {% else %}
+  <h2>Your Cart</h2>
+
+  <form action="/cart" method="post" id="cartform">
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Product</th>
+          <th class="c">Qty</th>
+          <th class="c">Price</th>
+          <th class="r">{{ settings.tr_remove_text }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items %}
+        <tr>
+          <td class="r">
+            <div class="product_image">
+              <a href="{{ item.product.url }}">
+                <img src="{{ item.product.featured_image | product_img_url: 'thumb' }}"  alt="{{ item.product.title }}" />
+              </a>
+            </div>
+          </td>
+          <td><a href="{{item.product.url }}">{{ item.title }}</a></td>
+          <td class="c">
+            <input type="text" size="4" name="updates[{{item.variant.id}}]" id="updates_{{item.variant.id}}" value="{{ item.quantity }}" onfocus="this.select();" class="item-quantity" />
+          </td>
+          <td class="c">{{ item.line_price | money }}</td>
+          <td class="r"><a href="#" class="cart" onClick="remove_item({{item.variant.id}}); return false;">{{ settings.tr_remove_text }}</a></td>
+        </tr>
+        {% endfor %}
+        <tr class="summary">
+          <td colspan="2"><label for="note" style="display:block;"><a href="#" onClick="jQuery('#note').toggle(); return false;">{{ settings.tr_cart_instructions }}</a></label></td>
+          <td class="c"><input type="submit" id="update-cart" name="update" value="{{ settings.tr_update_text }}" /></td>
+          <td class="c"><span class="total"><strong>{{ cart.total_price | money }}</strong></span></td>
+          <td class="r"><input type="submit" id="checkout" name="checkout" value="{{ settings.tr_checkout_text }}" /></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="checkout-buttons clearfix">
+      <div class="fl">
+        <textarea id="note" name="note" rows="10" cols="50" style="display:none;">{{ cart.note }}</textarea>
+      </div>
+      {% if additional_checkout_buttons %}
+      <div class="fr">
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+      {% endif %}
+    </div>
+
+  </form>
+  {% endif %}
+</div> <!-- /#cart -->
+
+{% include 'recently-viewed' %}
